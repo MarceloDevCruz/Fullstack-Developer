@@ -2,10 +2,14 @@
 
 class DeviseCreateUsers < ActiveRecord::Migration[8.0]
   def change
+    create_enum :roles, %w[admin user]
+
     create_table :users do |t|
       ## Database authenticatable
+      t.string :full_name,          null: false, default: "" 
       t.string :email,              null: false, default: ""
       t.string :encrypted_password, null: false, default: ""
+      t.column :role, :roles, null: false, default: "user"
 
       ## Recoverable
       t.string   :reset_password_token
