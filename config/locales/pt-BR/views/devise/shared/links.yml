@@ -1,0 +1,12 @@
+pt-BR:
+  views:
+    devise:
+      shared:
+        links:
+          sign_up: "Registrar-se"
+          sign_in: "Entrar"
+          forgot_your_password: "Esqueceu sua senha?"
+          back_to_login: "Voltar para o login"
+          didnt_receive_confirmation: "Não recebeu as instruções de confirmação?"
+          didnt_receive_unlock: "Não recebeu as instruções de desbloqueio?"
+          sign_in_with: "Entrar com %{provider}"
