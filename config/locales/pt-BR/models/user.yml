@@ -10,7 +10,7 @@ pt-BR:
         email: "E-mail"
         password: "Senha"
         password_confirmation: "Confirmação de senha"
-        role: "Role"
+        role: "Função"
     enums:
       user:
         role:
