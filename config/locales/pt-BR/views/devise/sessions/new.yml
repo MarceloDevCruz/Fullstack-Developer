@@ -1,0 +1,8 @@
+pt-BR:
+  views:
+    devise:
+      sessions:
+        new:
+          sign_in: "Login"
+          button:
+            submit: "Entrar"

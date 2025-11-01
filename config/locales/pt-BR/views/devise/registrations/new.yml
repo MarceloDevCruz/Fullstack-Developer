@@ -1,0 +1,12 @@
+pt-BR:
+  views:
+    devise:
+      registrations:
+        new:
+          sign_up: "Registrar"
+          minimum_password_length: "%{count} caracteres mínimo"
+          avatar:
+            label: "Foto de Perfil"
+            alt: "Selecione uma imagem de perfil"
+          button:
+            submit: "Registrar-se"

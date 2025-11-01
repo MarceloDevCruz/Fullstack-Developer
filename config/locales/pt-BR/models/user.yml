@@ -1,0 +1,21 @@
+pt-BR:
+  activerecord:
+    models:
+      user:
+        one: "Usuário"
+        other: "Usuários"
+    attributes:
+      user:
+        full_name: "Nome completo"
+        email: "E-mail"
+        password: "Senha"
+        password_confirmation: "Confirmação de senha"
+        role: "Role"
+    enums:
+      user:
+        role:
+          admin: "Administrador"
+          user: "Usuário"
+  errors:
+    messages:
+      blank: "não pode ficar em branco"
