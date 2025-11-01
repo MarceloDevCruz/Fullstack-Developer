@@ -1,7 +1,6 @@
 class DashboardController < ApplicationController
+  layout 'react', only: :index
 
-  def index
-    @user = User.last
-  end
+  def index ; end
 
 end

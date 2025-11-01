@@ -1,0 +1,16 @@
+{
+  "name": "fullstack-developer",
+  "private": true,
+  "dependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.19.0"
+  },
+  "scripts": {
+    "build": "esbuild app/javascript/application.js --bundle --loader:.js=jsx --target=es2017 --outfile=app/assets/builds/application.js --minify --external:@hotwired/turbo-rails --external:controllers",
+    "build:watch": "esbuild app/javascript/application.js --bundle --loader:.js=jsx --target=es2017 --outfile=app/assets/builds/application.js --watch --loader:.js=jsx --external:@hotwired/turbo-rails --external:controllers",
+    "start": "npm run build:watch"
+  }
+}
