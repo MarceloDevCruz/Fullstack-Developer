@@ -1,0 +1,34 @@
+<div class="min-vh-100 d-flex align-items-center justify-content-center">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h2 class="card-title mb-4"><%= t('views.devise.registrations.new.sign_up') %></h2>
+            <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+              <%= f.error_notification %>
+              <div class="mb-3">
+                <%= f.input :email, required: true, autofocus: true, input_html: { class: "form-control border-secondary", autocomplete: "email" } %>
+              </div>
+              <div class="mb-3">
+                <%= f.input :full_name, required: true, autofocus: true, input_html: { class: "form-control border-secondary", autocomplete: "name" } %>
+              </div>
+              <div class="mb-3">
+                <%= f.input :password, required: true, hint: (t('views.devise.registrations.new.minimum_password_length', count: @minimum_password_length) if @minimum_password_length), input_html: { class: "form-control border-secondary", autocomplete: "new-password" } %>
+              </div>
+              <div class="mb-3">
+                <%= f.input :password_confirmation, required: true, input_html: { class: "form-control border-secondary", autocomplete: "new-password" } %>
+              </div>
+              <div class="d-grid">
+                <%= f.button :submit, t('views.devise.registrations.new.button.submit'), class: "btn btn-primary" %>
+              </div>
+            <% end %>
+            <div class="mt-3">
+              <%= render "devise/shared/links" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
