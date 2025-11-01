@@ -3,8 +3,9 @@
 // import "controllers"
 // import "@popperjs/core"
 // import "bootstrap"
+import React from "react"
 import { createRoot } from "react-dom/client"
-import App from "./controllers/src/App.jsx"
+import App from "./src/App.jsx"
 
 document.addEventListener("DOMContentLoaded", () => {
   const container = document.getElementById("root")
