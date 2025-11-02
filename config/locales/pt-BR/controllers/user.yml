@@ -1,0 +1,4 @@
+pt-BR:
+  controllers:
+    user:
+      unauthorized: "Você não tem permissão! você será redirecionado para a página de seu perfil."

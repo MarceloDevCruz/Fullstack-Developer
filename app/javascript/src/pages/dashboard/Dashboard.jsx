@@ -6,6 +6,7 @@ export default function Dashboard() {
   const [users, setUsers] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [blocked, setBlocked] = useState(false);
 
   useEffect(() => {
     const loadUsers = async () => {
@@ -13,20 +14,30 @@ export default function Dashboard() {
         const data = await fetchUsers();
         setUsers(data);
       } catch (err) {
+        const status = err?.response?.status;
+        if (status === 403 || status === 401 || status === 500) {
+          setBlocked(true);
+          return;
+        }
         setError(err.message);
       } finally {
         setLoading(false);
       }
     };
-
     loadUsers();
   }, []);
 
-  if (loading) {
-    return (
-      <Loading />
-    );
-  }
+  if (blocked) return null;
+
+  if (loading) return (<Loading />);
+
+  const avatarStyle = {
+    width: "34px",
+    height: "34px",
+    borderRadius: "50%",
+    objectFit: "cover",
+    border: "2px solid #fff",
+  };
 
   return (
     <div className="min-vh-100 d-flex align-items-start justify-content-center bg-dark text-white py-5">
@@ -34,7 +45,6 @@ export default function Dashboard() {
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h1 className="h4">Dashboard</h1>
         </div>
-
         <div className="card bg-secondary text-white shadow-sm">
           <div className="card-body">
             {error && <p className="text-danger">Erro: {error}</p>}
@@ -45,7 +55,8 @@ export default function Dashboard() {
                 <table className="table table-dark table-striped">
                   <thead>
                     <tr>
-                      <th>ID</th>
+                      <th>Id</th>
+                      <th>Foto</th>
                       <th>Nome</th>
                       <th>Email</th>
                       <th>Função</th>
@@ -55,6 +66,7 @@ export default function Dashboard() {
                     {users.map((user) => (
                       <tr key={user.id}>
                         <td>{user.id}</td>
+                        <td> <img src={user.attributes.avatar.src} alt={user.attributes.full_name} style={avatarStyle} /></td>
                         <td>{user.attributes.full_name}</td>
                         <td>{user.attributes.email}</td>
                         <td>{user.attributes.role}</td>

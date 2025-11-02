@@ -131,6 +131,8 @@ GEM
     et-orbi (1.4.0)
       tzinfo
     ffaker (2.25.0)
+    friendly_id (5.5.1)
+      activerecord (>= 4.0.0)
     fugit (1.12.1)
       et-orbi (~> 1.4)
       raabro (~> 1.4)
@@ -454,6 +456,7 @@ DEPENDENCIES
   devise
   draper
   ffaker
+  friendly_id
   importmap-rails
   jbuilder
   jquery-rails
