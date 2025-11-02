@@ -33,6 +33,6 @@ export default function Profile({ user }) {
   if (loading) return (<Loading />);
 
   return (
-    <p>pinto</p>
+    <p>TESTE</p>
   );
 }
