@@ -27,12 +27,12 @@ class User < ApplicationRecord
     allowed = %w[image/png image/jpg image/jpeg image/webp]
     ct = avatar.blob&.content_type
     unless allowed.include?(ct)
-      errors.add(:avatar, "deve ser PNG, JPG, JPEG ou WEBP")
+      errors.add(:avatar, I18n.t("activerecord.errors.messages.validate_avatar_type_and_size.type"))
     end
 
     size = avatar.blob&.byte_size.to_i
     if size > 5.megabytes
-      errors.add(:avatar, "deve ter menos de 5MB")
+      errors.add(:avatar, I18n.t("activerecord.errors.messages.validate_avatar_type_and_size.size"))
     end
   end
 end
