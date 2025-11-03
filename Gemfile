@@ -58,9 +58,12 @@ group :development, :test do
   gem "brakeman", require: false
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
-  gem "rubocop-rails-omakase", require: false
-  gem "rspec-rails", require: false
+  gem "rubocop-rails-omakase"
+  gem "rspec-rails"
   gem "ffaker"
+  gem "factory_bot_rails"
+  gem "shoulda-matchers"
+  gem "simplecov"
 end
 
 group :development do
