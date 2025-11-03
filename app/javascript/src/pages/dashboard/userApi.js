@@ -1,5 +1,6 @@
 import axios from "axios";
 import Swal from "sweetalert2";
+import PATHS from "../../navigation/navigation";
 
 export async function fetchUsers() {
   try {
@@ -20,7 +21,7 @@ export async function fetchUsers() {
       });
 
       setTimeout(() => {
-        window.location.assign("/");
+        window.location.assign(PATHS.login);
       }, 3000);
     }
 

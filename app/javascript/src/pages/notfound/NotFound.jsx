@@ -1,9 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Main } from "../../components/styles/Main.jsx";
 
 export default function NotFound() {
   return (
-    <div className="min-vh-100 d-flex align-items-center justify-content-center bg-dark text-white">
+    <Main>
       <div className="container">
         <div className="row justify-content-center">
           <div className="col-md-8 col-lg-6">
@@ -18,6 +19,6 @@ export default function NotFound() {
           </div>
         </div>
       </div>
-    </div>
+    </Main>
   );
 }

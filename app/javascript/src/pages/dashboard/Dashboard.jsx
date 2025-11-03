@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Loading from "../../components/Loading.jsx";
 import { fetchUsers } from "./userApi";
+import { Main } from "../../components/styles/Main.jsx";
 
 export default function Dashboard() {
   const [users, setUsers] = useState([]);
@@ -40,7 +41,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-vh-100 d-flex align-items-start justify-content-center bg-dark text-white py-5">
+    <Main>
       <div className="container">
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h1 className="h4">Dashboard</h1>
@@ -79,6 +80,6 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-    </div>
+    </Main>
   );
 }

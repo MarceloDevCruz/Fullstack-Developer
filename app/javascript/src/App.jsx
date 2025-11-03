@@ -9,6 +9,9 @@ import NotFound from "./pages/notfound/NotFound.jsx";
 import Show from "./pages/profile/Show.jsx";
 import Edit from "./pages/profile/Edit.jsx";
 
+//components
+import Header from "./components/Header.jsx";
+
 function WithAuth({ children }) {
   const { user, isAuthenticated, loading } = useAuth();
   return React.cloneElement(children, { user, isAuthenticated, loading });
@@ -20,24 +23,31 @@ export default function App() {
       <AuthProvider>
         <Routes>
           <Route path="/" element={
-            <WithAuth>
-              <Dashboard />
-            </WithAuth>
+            <>
+              <WithAuth><Header /></WithAuth>
+              <WithAuth>
+                <Dashboard />
+              </WithAuth>
+            </>
           } />
           <Route path="/perfil" element={
-            <WithAuth>
-              <Show />
-            </WithAuth>
+            <>
+              <WithAuth><Header /></WithAuth>
+              <WithAuth>
+                <Show />
+              </WithAuth>
+            </>
           } />
           <Route path="/perfil/editar" element={
-            <WithAuth>
-              <Edit />
-            </WithAuth>
+            <>
+              <WithAuth><Header /></WithAuth>
+              <WithAuth>
+                <Edit />
+              </WithAuth>
+            </>
           } />
           <Route path="*" element={
-            <WithAuth>
-              <NotFound />
-            </WithAuth>
+            <NotFound />
           } />
         </Routes>
       </AuthProvider>

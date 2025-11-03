@@ -47,7 +47,7 @@ export async function edit(id) {
       });
 
       setTimeout(() => {
-        window.location.assign("/");
+        window.location.assign(PATHS.login);
       }, 3000);
     }
 
