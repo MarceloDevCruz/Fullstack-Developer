@@ -1,4 +1,3 @@
-
 const PATHS = {
   admin: "/",
   profile: "/perfil",
@@ -6,6 +5,7 @@ const PATHS = {
   login: "/login",
   signup: "/registro",
   spreedsheet: "/planilha",
+  logout: "/logout",
 }
 
 export default PATHS;

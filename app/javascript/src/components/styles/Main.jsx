@@ -1,22 +1,23 @@
 import React from "react";
 import { styled } from "styled-components";
+import Header from "../Header";
 
 const Container = styled.div`
   min-height: 100vh;
   color: #e5e7eb;
   background-image:
-    linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
+    linear-gradient(rgba(46,16,101,0.78), rgba(19, 12, 32, 0.78)),
     url("/background.svg"),
-    radial-gradient(800px 600px at 10% -10%, rgba(168,85,247,0.08), transparent 40%),
-    radial-gradient(700px 500px at 110% 120%, rgba(59,130,246,0.06), transparent 45%),
-    linear-gradient(180deg, #050505 0%, #0a0a0f 50%, #0b0b12 100%);
+    radial-gradient(800px 600px at 10% -10%, rgba(61, 27, 87, 0.1), transparent 40%),
+    radial-gradient(700px 500px at 110% 120%, rgba(44, 23, 59, 0.08), transparent 45%),
+    linear-gradient(180deg, #0d0718 0%, #0a0611 50%, #07010f 100%);
   background-repeat: no-repeat, repeat, no-repeat, no-repeat, no-repeat;
   background-size: 100% 100%, 800px 800px, auto, auto, auto;
   background-position: center, center, center, center, center;
   background-attachment: fixed, scroll, fixed, fixed, fixed;
 `;
 
-export function Main({ children }) {
-  return <Container>{children}</Container>;
+export function Main({ user, children }) {
+
+  return <><Header user={user} /><Container>{children}</Container></>;
 }
-    

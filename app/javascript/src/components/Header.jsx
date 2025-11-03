@@ -1,16 +1,51 @@
 import React from "react";
+import PATHS from "../navigation/navigation.js";
+import { useNavigate } from "react-router-dom";
+import {Bar,
+  Inner,
+  Avatar,
+  Nav,
+  Link,
+  SignOut,
+} from "./styled"
 
-export default function Header({user}) {
+export default function Header({ user }) {
+  const navigate = useNavigate();
 
-  console.log(user);
+  const handleSignOut = async (e) => {
+    e.preventDefault();
+    try {
+      const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute("content");
+      const res = await fetch(PATHS.logout, {
+        method: "DELETE",
+        headers: {
+          "X-CSRF-Token": token,
+          "Accept": "text/html,application/xhtml+xml,application/xml",
+        },
+        credentials: "include",
+      });
+      if (res.ok) {
+        window.location.href = PATHS.login;
+      } else {
+        window.location.reload();
+      }
+    } catch {
+      window.location.reload();
+    }
+  };
 
   return (
-    <header className="py-3 mb-4 border-bottom">
-      <div className="container d-flex flex-wrap justify-content-center">
-        <a href="/" className="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto text-white text-decoration-none">
-          <span className="fs-4">Meu App</span>
-        </a>
-      </div>
-    </header>
+    <Bar>
+      <Inner>
+        <Avatar src={user?.attributes?.avatar?.src} alt={user?.attributes?.full_name} />
+        <Nav>
+          <Link type="button" onClick={() => navigate(PATHS.admin)}>Admin</Link>
+          <Link type="button" onClick={() => navigate(PATHS.profile)}>Perfil</Link>
+          <Link type="button" onClick={() => navigate(PATHS.edit)}>Editar Perfil</Link>
+          <Link type="button" onClick={() => navigate(PATHS.spreedsheet)}>Planilha</Link>
+          <SignOut onClick={handleSignOut}>Sair</SignOut>
+        </Nav>
+      </Inner>
+    </Bar>
   );
 }

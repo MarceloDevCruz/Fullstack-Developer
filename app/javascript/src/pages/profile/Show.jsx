@@ -1,6 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { show } from './userApi';
-import Loading from '../../components/Loading';
+import React, { useEffect, useState } from "react";
+import { Main } from "../../components/styles/Main.jsx";
+import PATHS from "../../navigation/navigation.js";
+import { show } from "./userApi";
+import Loading from "../../components/Loading";
+import {
+  Page,
+  Card,
+  Title,
+  Grid,
+  AvatarBig,
+  Field,
+  Label,
+  Value,
+  RoleBadge,
+  ErrorText,
+  Actions,
+  Button,
+} from "./styled";
 
 export default function Profile({ user }) {
   const [profile, setProfile] = useState(null);
@@ -9,7 +25,6 @@ export default function Profile({ user }) {
   const [blocked, setBlocked] = useState(false);
 
   useEffect(() => {
-    if (!user?.id) return;
     const loadProfile = async () => {
       try {
         const data = await show(user?.id);
@@ -29,20 +44,38 @@ export default function Profile({ user }) {
   }, [user?.id]);
 
   if (blocked) return null;
-
-  if (loading) return (<Loading />);
+  if (loading) return <Loading />;
 
   return (
-    <div className="container py-4 text-white">
-      <h1 className="h4 mb-3">Perfil</h1>
-      <div className="card bg-secondary text-white">
-        <div className="card-body d-flex flex-column gap-2">
-          <div><strong>Nome:</strong> {profile?.attributes?.full_name}</div>
-          <div><strong>E-mail:</strong> {profile?.attributes?.email}</div>
-          <div><strong>Função:</strong> {profile?.attributes?.role}</div>
-          <div><strong>Foto:</strong> <img src={profile.attributes.avatar.src} alt={profile.attributes.full_name} /></div>
-        </div>
-      </div>
-    </div>
+    <Main user={user}>
+      <Page>
+        <Card>
+          <Title>Perfil</Title>
+          {error && <ErrorText>Erro: {error}</ErrorText>}
+          <Grid>
+            <AvatarBig src={profile?.attributes?.avatar?.src} alt={profile?.attributes?.full_name} />
+            <div>
+              <Field>
+                <Label>Nome</Label>
+                <Value>{profile?.attributes?.full_name}</Value>
+              </Field>
+              <Field>
+                <Label>E-mail</Label>
+                <Value>{profile?.attributes?.email}</Value>
+              </Field>
+              <Field>
+                <Label>Função</Label>
+                <Value>
+                  <RoleBadge>{profile?.attributes?.role}</RoleBadge>
+                </Value>
+              </Field>
+              <Actions>
+                <Button to={PATHS.edit}>Editar Perfil</Button>
+              </Actions>
+            </div>
+          </Grid>
+        </Card>
+      </Page>
+    </Main>
   );
 }

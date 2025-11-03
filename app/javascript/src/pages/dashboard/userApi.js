@@ -1,10 +1,10 @@
-import axios from "axios";
 import Swal from "sweetalert2";
 import PATHS from "../../navigation/navigation";
+import http from "../../utils/csrfToken.js";
 
 export async function fetchUsers() {
   try {
-    const response = await axios.get("/api/v1/users");
+    const response = await http.get("/api/v1/users");
     return response.data.data;
   } catch (error) {
     const status = error?.response?.status;

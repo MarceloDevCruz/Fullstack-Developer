@@ -2,8 +2,21 @@ import React, { useEffect, useState } from "react";
 import Loading from "../../components/Loading.jsx";
 import { fetchUsers } from "./userApi";
 import { Main } from "../../components/styles/Main.jsx";
+import { Page,
+  Title,
+  Card, 
+  TableWrap,
+  Table,
+  Th,
+  Tr,
+  Td,
+  Avatar,
+  RoleBadge,
+  ErrorText,
+  EmptyText
+} from "./styled.js";
 
-export default function Dashboard() {
+export default function Dashboard({user}) {
   const [users, setUsers] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -29,57 +42,51 @@ export default function Dashboard() {
   }, []);
 
   if (blocked) return null;
-
   if (loading) return (<Loading />);
 
-  const avatarStyle = {
-    width: "34px",
-    height: "34px",
-    borderRadius: "50%",
-    objectFit: "cover",
-    border: "2px solid #fff",
-  };
-
   return (
-    <Main>
-      <div className="container">
-        <div className="d-flex justify-content-between align-items-center mb-4">
-          <h1 className="h4">Dashboard</h1>
-        </div>
-        <div className="card bg-secondary text-white shadow-sm">
-          <div className="card-body">
-            {error && <p className="text-danger">Erro: {error}</p>}
-            {users.length === 0 && !error ? (
-              <p>Nenhum usuário encontrado.</p>
-            ) : (
-              <div className="table-responsive">
-                <table className="table table-dark table-striped">
-                  <thead>
-                    <tr>
-                      <th>Id</th>
-                      <th>Foto</th>
-                      <th>Nome</th>
-                      <th>Email</th>
-                      <th>Função</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {users.map((user) => (
-                      <tr key={user.id}>
-                        <td>{user.id}</td>
-                        <td> <img src={user.attributes.avatar.src} alt={user.attributes.full_name} style={avatarStyle} /></td>
-                        <td>{user.attributes.full_name}</td>
-                        <td>{user.attributes.email}</td>
-                        <td>{user.attributes.role}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
+    <Main user={user}>
+      <Page>
+        <Title>Dashboard</Title>
+        <Card>
+          {error && <ErrorText>Erro: {error}</ErrorText>}
+          {users.length === 0 && !error ? (
+            <EmptyText>Nenhum usuário encontrado.</EmptyText>
+          ) : (
+            <TableWrap>
+              <Table>
+                <thead>
+                  <tr>
+                    <Th>Id</Th>
+                    <Th>Foto</Th>
+                    <Th>Nome</Th>
+                    <Th>Email</Th>
+                    <Th>Função</Th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {users.map((u) => (
+                    <Tr key={u.id}>
+                      <Td>{u.id}</Td>
+                      <Td>
+                        <Avatar
+                          src={u.attributes.avatar.src}
+                          alt={u.attributes.full_name}
+                        />
+                      </Td>
+                      <Td>{u.attributes.full_name}</Td>
+                      <Td>{u.attributes.email}</Td>
+                      <Td>
+                        <RoleBadge>{u.attributes.role}</RoleBadge>
+                      </Td>
+                    </Tr>
+                  ))}
+                </tbody>
+              </Table>
+            </TableWrap>
+          )}
+        </Card>
+      </Page>
     </Main>
   );
 }
