@@ -11,8 +11,8 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   </head>
 
-  <body>
-    <%= button_to "Sair", destroy_user_session_path, method: :delete, class: "btn btn-sm" %>
+  <body class="bg-dark">
+    <!--<%= button_to "Sair", destroy_user_session_path, method: :delete, class: "btn btn-sm btn-outline-light" %>-->
     <div id="root"></div>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   </body>

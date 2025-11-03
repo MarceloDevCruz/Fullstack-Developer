@@ -16,6 +16,9 @@ pt-BR:
         role:
           admin: "Administrador"
           user: "Usuário"
-  errors:
-    messages:
-      blank: "não pode ficar em branco"
+    errors:
+      messages:
+        blank: "não pode ficar em branco"
+        validate_avatar_type_and_size:
+          type: "deve ser PNG, JPG, JPEG ou WEBP"
+          size: "deve ter menos de 5MB"

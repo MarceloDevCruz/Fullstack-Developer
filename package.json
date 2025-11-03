@@ -5,10 +5,13 @@
     "axios": "^1.13.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react-router-dom": "6"
+    "react-hook-form": "^7.66.0",
+    "react-router-dom": "6",
+    "styled-components": "^6.1.19",
+    "sweetalert2": "^11.26.3"
   },
   "devDependencies": {
-    "esbuild": "^0.19.0"
+    "esbuild": "^0.25.11"
   },
   "scripts": {
     "build": "esbuild app/javascript/application.js --bundle --loader:.js=jsx --target=es2017 --outfile=app/assets/builds/application.js --minify --external:@hotwired/turbo-rails --external:controllers",

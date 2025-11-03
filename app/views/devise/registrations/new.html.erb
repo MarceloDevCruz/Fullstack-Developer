@@ -11,7 +11,7 @@
                 <%= f.input :email, required: true, autofocus: true, input_html: { class: "form-control border-secondary", autocomplete: "email" } %>
               </div>
               <div class="mb-3">
-                <%= f.input :full_name, required: true, autofocus: true, input_html: { class: "form-control border-secondary", autocomplete: "name" } %>
+                <%= f.input :full_name, required: true, autofocus: true, input_html: { class: "form-control border-secondary", autocomplete: "full_name" } %>
               </div>
               <div class="mb-3">
                 <%= f.input :password, required: true, hint: (t('views.devise.registrations.new.minimum_password_length', count: @minimum_password_length) if @minimum_password_length), input_html: { class: "form-control border-secondary", autocomplete: "new-password" } %>

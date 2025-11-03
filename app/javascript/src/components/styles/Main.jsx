@@ -1,7 +1,8 @@
 import React from "react";
 import { styled } from "styled-components";
+import Header from "../Header";
 
-const Bg = styled.div`
+const Container = styled.div`
   min-height: 100vh;
   color: #e5e7eb;
   background-image:
@@ -16,27 +17,7 @@ const Bg = styled.div`
   background-attachment: fixed, scroll, fixed, fixed, fixed;
 `;
 
-export default function Loading() {
-  return (
-    <Bg className="min-vh-100 d-flex align-items-center justify-content-center">
-      <div className="text-center">
-        <div
-          className="spinner-border"
-          role="status"
-          style={{
-            color: "#a78bfa",
-            width: "3rem",
-            height: "3rem",
-            borderWidth: "0.25rem",
-            filter: "drop-shadow(0 0 18px rgba(139,92,246,0.35))",
-          }}
-        >
-          <span className="visually-hidden">Carregando...</span>
-        </div>
-        <p className="mt-3 mb-0" style={{ color: "#ede9fe" }}>
-          Carregando dados...
-        </p>
-      </div>
-    </Bg>
-  );
+export function Main({ user, children }) {
+
+  return <><Header user={user} /><Container>{children}</Container></>;
 }
