@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Loading from "../../components/Loading.jsx";
-import { fetchUsers } from "./userApi";
+import { fetchUsers } from "./user.api.js";
 import { Main } from "../../components/styles/Main.jsx";
 import { Page,
   Title,

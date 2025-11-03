@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Main } from "../../components/styles/Main.jsx";
 import PATHS from "../../navigation/navigation.js";
-import { show } from "./userApi";
+import { show } from "./user.api.js";
 import Loading from "../../components/Loading";
 import {
   Page,

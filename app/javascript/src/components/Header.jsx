@@ -42,7 +42,7 @@ export default function Header({ user }) {
           <Link type="button" onClick={() => navigate(PATHS.admin)}>Admin</Link>
           <Link type="button" onClick={() => navigate(PATHS.profile)}>Perfil</Link>
           <Link type="button" onClick={() => navigate(PATHS.edit)}>Editar Perfil</Link>
-          <Link type="button" onClick={() => navigate(PATHS.spreedsheet)}>Planilha</Link>
+          <Link as="a" href={PATHS.spreedsheet}>Planilha</Link>
           <SignOut onClick={handleSignOut}>Sair</SignOut>
         </Nav>
       </Inner>
