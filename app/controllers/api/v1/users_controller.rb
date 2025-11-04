@@ -65,7 +65,7 @@ class Api::V1::UsersController < ApplicationController
   private
 
   def set_user
-    @user = ::User.find(params[:id]) || current_user
+    @user = ::User.find_by(id: params[:id]) || current_user
   end
 
   def user_params

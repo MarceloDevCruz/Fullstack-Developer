@@ -21,7 +21,7 @@ export async function fetchUsers() {
       });
 
       setTimeout(() => {
-        window.location.assign(PATHS.login);
+        window.location.assign(PATHS.profile);
       }, 3000);
     }
 

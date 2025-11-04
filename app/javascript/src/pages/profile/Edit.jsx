@@ -40,7 +40,7 @@ export default function ProfileEdit({ user }) {
       try {
         const data = await edit(user.id);
         setProfile(data);
-        const a = data?.attributes || {};
+        const a = data?.attributes;
         setForm((f) => ({
           ...f,
           full_name: a.full_name || "",

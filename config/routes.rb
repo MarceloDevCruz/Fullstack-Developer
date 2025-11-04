@@ -1,7 +1,11 @@
 Rails.application.routes.draw do
   devise_for :users,
-             path: '',
-             path_names: { sign_in: 'login', sign_out: 'logout', sign_up: 'registrar' }
+              path: '',
+              controllers: {
+                sessions: 'users/sessions',
+                registrations: 'users/registrations'
+              },
+              path_names: { sign_in: 'login', sign_out: 'logout', sign_up: 'registrar' }
   
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -18,9 +22,13 @@ Rails.application.routes.draw do
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
+  get  "/planilha", to: "dashboard#import_spreadsheet",  as: :import_spreadsheet
+  post "/planilha", to: "dashboard#upload_spreadsheet", as: :import_spreadsheet_upload
 
   # Defines the root path route ("/")
   root "dashboard#index"
+  mount ActionCable.server => '/cable'
+  get "/.well-known/appspecific/com.chrome.devtools.json", to: proc { [404, {}, ['']] }
   
   get '*path', to: "application#fallback_react_app", constraints: ->(request) do
     !request.xhr? && request.format.html?

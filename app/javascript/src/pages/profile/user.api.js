@@ -76,7 +76,7 @@ export async function update(id, attrs) {
     return response.data.data;
   } catch (error) {
     const status = error?.response?.status;
-    if (status === 403 || status === 401 || status === 500) {
+    if (status === 403 || status === 401 || status === 404 || status === 500) {
       const serverMsg = error?.response?.data?.error;
       Swal.fire({
         icon: "warning",

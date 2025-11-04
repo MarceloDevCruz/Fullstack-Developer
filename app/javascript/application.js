@@ -4,6 +4,7 @@
 // import "@popperjs/core"
 // import "bootstrap"
 import React from "react"
+import "./channels"
 import { createRoot } from "react-dom/client"
 import App from "./src/App.jsx"
 

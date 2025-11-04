@@ -1,0 +1,63 @@
+<h1 class="text-light">Importar Planilha</h1>
+
+<% if flash[:notice] %><div class="alert alert-success"><%= flash[:notice] %></div><% end %>
+<% if flash[:alert] %><div class="alert alert-danger"><%= flash[:alert] %></div><% end %>
+
+<%= form_with url: import_spreadsheet_upload_path, method: :post, multipart: true, local: true, html: { class: "mt-3" } do %>
+  <%= hidden_field_tag :token, @token %>
+  <div class="mb-3">
+    <label class="form-label text-light">Arquivo (.xlsx, .xls, .csv)</label>
+    <%= file_field_tag :csv_file,
+        accept: ".csv,.xlsx,.xls,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel",
+        class: "form-control" %>
+  </div>
+  <div class="form-check mb-3">
+    <%= check_box_tag :headers, "1", true, id: "headersCheck", class: "form-check-input" %>
+    <label class="form-check-label text-light" for="headersCheck">Primeira linha tem cabeçalho</label>
+  </div>
+  <%= submit_tag "Enviar e processar", class: "btn btn-primary" %>
+<% end %>
+
+<hr class="border-secondary" />
+<h5 class="text-light">Progresso</h5>
+<div class="progress mb-2" style="height: 20px;">
+  <div id="importProgress" class="progress-bar bg-info" role="progressbar" style="width: 0%;">0%</div>
+</div>
+<pre id="importLog" class="bg-dark text-light p-2 rounded" style="max-height: 300px; overflow:auto;"></pre>
+
+<script type="module">
+  import * as ActionCable from "https://cdn.skypack.dev/@rails/actioncable";
+  const consumer = ActionCable.createConsumer("/cable");
+  const token = "<%= @token %>";
+  const progressEl = document.getElementById("importProgress");
+  const logEl = document.getElementById("importLog");
+
+  function setProgress(cur, total) {
+    if (!total) return;
+    const pct = Math.round((cur / total) * 100);
+    progressEl.style.width = pct + "%";
+    progressEl.textContent = pct + "%";
+  }
+  function log(msg) {
+    logEl.textContent += msg + "\n";
+    logEl.scrollTop = logEl.scrollHeight;
+  }
+
+  consumer.subscriptions.create({ channel: "ImportSpreadsheetChannel", token }, {
+    received(data) {
+      if (data.type === "start") {
+        setProgress(0, data.total);
+        log(`Iniciando. Total: ${data.total}`);
+      } else if (data.type === "progress") {
+        setProgress(data.current, data.total);
+        log(`${data.ok ? "✔" : "✖"} (${data.current}/${data.total}) ${data.message}`);
+      } else if (data.type === "finished") {
+        setProgress(data.total, data.total);
+        log(`Concluído. Importados: ${data.imported}, Falharam: ${data.failed}`);
+        if (data.errors?.length) log("Erros:\n- " + data.errors.join("\n- "));
+      } else {
+        log(JSON.stringify(data));
+      }
+    }
+  });
+</script>

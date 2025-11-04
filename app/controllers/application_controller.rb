@@ -10,7 +10,22 @@ class ApplicationController < ActionController::Base
 
   def fallback_react_app ; end
 
-  def after_sign_out_path_for(resource_or_scope)
+  def after_sign_in_path_for(resource)
+    stored = stored_location_for(resource)
+    return stored if stored.present?
+
+    if resource.respond_to?(:admin?) && resource.admin?
+      root_path
+    else
+      "/perfil"
+    end
+  end
+
+ def after_sign_up_path_for(resource)
+    "/perfil"
+  end
+
+  def after_update_path_for(resource)
     new_user_session_path
   end
 
