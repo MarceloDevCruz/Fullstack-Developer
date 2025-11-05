@@ -3,8 +3,6 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
   allow_browser versions: :modern
   #skip_before_action :verify_authenticity_token
-  protect_from_forgery with: :null_session
-
 
   layout "react", only: [:fallback_react_app]
 
@@ -17,12 +15,12 @@ class ApplicationController < ActionController::Base
     if resource.respond_to?(:admin?) && resource.admin?
       root_path
     else
-      "/perfil"
+      "/perfil/#{current_user.slug}"
     end
   end
 
  def after_sign_up_path_for(resource)
-    "/perfil"
+    "/perfil/#{resource.slug}"
   end
 
   def after_update_path_for(resource)

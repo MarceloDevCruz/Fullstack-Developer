@@ -1,0 +1,12 @@
+pt-BR:
+  errors:
+    messages:
+      taken: "já está em uso"
+      invalid: "não é válido"
+      too_short: "é muito curto (mínimo: %{count} caracteres)"
+      too_long: "é muito longo (máximo: %{count} caracteres)"
+  activerecord:
+    errors:
+      messages:
+        too_short: "é muito curto (mínimo: %{count} caracteres)"
+        too_long: "é muito longo (máximo: %{count} caracteres)"

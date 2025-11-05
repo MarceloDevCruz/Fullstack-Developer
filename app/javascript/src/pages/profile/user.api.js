@@ -2,7 +2,7 @@ import Swal from "sweetalert2";
 import PATHS from "../../navigation/navigation.js";
 import http from "../../utils/csrfToken.js";
 
-export async function show(id) {
+export async function showUser(id) {
   try {
     const response = await http.get(`/api/v1/users/${id}`);
     return response.data.data;
@@ -29,7 +29,7 @@ export async function show(id) {
   }
 }
 
-export async function edit(id) {
+export async function editUser(id) {
   try {
     const response = await http.get(`/api/v1/users/${id}/edit`);
     return response.data.data;
@@ -56,7 +56,7 @@ export async function edit(id) {
   }
 }
 
-export async function update(id, attrs) {
+export async function updateUser(id, attrs) {
   try {
     if (attrs.avatar instanceof File) {
       const form = new FormData();

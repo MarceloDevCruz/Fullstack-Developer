@@ -22,3 +22,9 @@ pt-BR:
         validate_avatar_type_and_size:
           type: "deve ser PNG, JPG, JPEG ou WEBP"
           size: "deve ter menos de 5MB"
+      models:
+        user:
+          attributes:
+            full_name:
+              too_short: "é muito curto (mínimo: %{count} caracteres)"
+              too_long: "é muito longo (máximo: %{count} caracteres)"

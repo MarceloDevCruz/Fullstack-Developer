@@ -1,6 +1,6 @@
 class Api::V1::UsersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_user, only: [:show, :edit, :create, :update, :destroy]
+  before_action :set_user, only: [:show, :edit, :update, :destroy]
 
   def index
     if current_user.admin?
@@ -65,7 +65,8 @@ class Api::V1::UsersController < ApplicationController
   private
 
   def set_user
-    @user = ::User.find_by(id: params[:id]) || current_user
+    identifier = params[:id]
+    @user = ::User.find_by(slug: identifier) || ::User.find_by(id: identifier) || current_user
   end
 
   def user_params

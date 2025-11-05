@@ -1,63 +1,94 @@
-<h1 class="text-light">Importar Planilha</h1>
+<div class="container my-4">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-8">
+      <h1 class="h3 mb-3"><%= t('views.dashboard.import_spreadsheet.title') %></h1>
+      <div class="card mb-3">
+        <div class="card-body">
+          <p class="text-muted mb-3"><%= t('views.dashboard.import_spreadsheet.instructions') %></p>
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <a class="btn btn-outline-secondary" href="/spreadsheets/planilha_modelo.xlsx" download>
+              <%= t('views.dashboard.import_spreadsheet.download_template') %>
+            </a>
+            <small class="text-muted"><%= t('views.dashboard.import_spreadsheet.columns.title') %> <code><%= t('views.dashboard.import_spreadsheet.columns.full_name') %></code>, <code><%= t('views.dashboard.import_spreadsheet.columns.email') %></code>, <code><%= t('views.dashboard.import_spreadsheet.columns.role') %></code> <%= t('views.dashboard.import_spreadsheet.columns.roles') %></small>
+          </div>
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <a class="btn btn-outline-secondary" href="/spreadsheets/teste_de_carga.xlsx" download>
+              <%= t('views.dashboard.import_spreadsheet.download_test') %>
+            </a>
+          </div>
 
-<% if flash[:notice] %><div class="alert alert-success"><%= flash[:notice] %></div><% end %>
-<% if flash[:alert] %><div class="alert alert-danger"><%= flash[:alert] %></div><% end %>
+          <%= form_with url: import_spreadsheet_upload_path, method: :post, multipart: true, local: true do %>
+            <%= hidden_field_tag :token, @token %>
+            <div class="mb-3">
+              <label class="form-label"><%= t('views.dashboard.import_spreadsheet.label') %></label>
+              <%= file_field_tag :csv_file,
+                  accept: ".csv,.xlsx,.xls,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel",
+                  class: "form-control" %>
+            </div>
+            <button class="btn btn-success" type="submit"><%= t('views.dashboard.import_spreadsheet.upload_button') %></button>
+          <% end %>
+        </div>
+      </div>
 
-<%= form_with url: import_spreadsheet_upload_path, method: :post, multipart: true, local: true, html: { class: "mt-3" } do %>
-  <%= hidden_field_tag :token, @token %>
-  <div class="mb-3">
-    <label class="form-label text-light">Arquivo (.xlsx, .xls, .csv)</label>
-    <%= file_field_tag :csv_file,
-        accept: ".csv,.xlsx,.xls,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel",
-        class: "form-control" %>
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <strong><%= t('views.dashboard.import_spreadsheet.progress') %></strong>
+            <small class="text-muted"><%= t('views.dashboard.import_spreadsheet.action_cable') %></small>
+          </div>
+          <div class="progress mb-2" style="height: 20px;">
+            <div id="importProgress" class="progress-bar bg-info" role="progressbar" style="width: 0%;">0%</div>
+          </div>
+          <pre id="importLog" class="form-control" style="height: 220px; overflow: auto;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="form-check mb-3">
-    <%= check_box_tag :headers, "1", true, id: "headersCheck", class: "form-check-input" %>
-    <label class="form-check-label text-light" for="headersCheck">Primeira linha tem cabeçalho</label>
-  </div>
-  <%= submit_tag "Enviar e processar", class: "btn btn-primary" %>
-<% end %>
-
-<hr class="border-secondary" />
-<h5 class="text-light">Progresso</h5>
-<div class="progress mb-2" style="height: 20px;">
-  <div id="importProgress" class="progress-bar bg-info" role="progressbar" style="width: 0%;">0%</div>
 </div>
-<pre id="importLog" class="bg-dark text-light p-2 rounded" style="max-height: 300px; overflow:auto;"></pre>
 
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script type="module">
   import * as ActionCable from "https://cdn.skypack.dev/@rails/actioncable";
   const consumer = ActionCable.createConsumer("/cable");
   const token = "<%= @token %>";
-  const progressEl = document.getElementById("importProgress");
-  const logEl = document.getElementById("importLog");
+  const $jq = window.jQuery;
 
-  function setProgress(cur, total) {
-    if (!total) return;
-    const pct = Math.round((cur / total) * 100);
-    progressEl.style.width = pct + "%";
-    progressEl.textContent = pct + "%";
-  }
-  function log(msg) {
-    logEl.textContent += msg + "\n";
-    logEl.scrollTop = logEl.scrollHeight;
-  }
+  $jq(function() {
+    const $progress = $jq('#importProgress');
+    const $log = $jq('#importLog');
 
-  consumer.subscriptions.create({ channel: "ImportSpreadsheetChannel", token }, {
-    received(data) {
-      if (data.type === "start") {
-        setProgress(0, data.total);
-        log(`Iniciando. Total: ${data.total}`);
-      } else if (data.type === "progress") {
-        setProgress(data.current, data.total);
-        log(`${data.ok ? "✔" : "✖"} (${data.current}/${data.total}) ${data.message}`);
-      } else if (data.type === "finished") {
-        setProgress(data.total, data.total);
-        log(`Concluído. Importados: ${data.imported}, Falharam: ${data.failed}`);
-        if (data.errors?.length) log("Erros:\n- " + data.errors.join("\n- "));
-      } else {
-        log(JSON.stringify(data));
-      }
+    function setProgress(cur, total) {
+      if (!total) return;
+      const pct = Math.round((cur / total) * 100);
+      $progress.css('width', pct + '%').text(pct + '%');
     }
+
+    function log(msg) {
+      $log.append(msg + "\n");
+      $log.scrollTop($log[0].scrollHeight);
+    }
+
+    $jq('form').on('submit', function() {
+      const $btn = $jq(this).find('button[type="submit"]');
+      $btn.prop('disabled', true).removeClass('btn-success').addClass('btn-secondary').text('Enviando...');
+    });
+
+    consumer.subscriptions.create({ channel: 'ImportSpreadsheetChannel', token }, {
+      received(data) {
+        if (data.type === 'start') {
+          setProgress(0, data.total);
+          log(`Iniciando. Total: ${data.total}`);
+        } else if (data.type === 'progress') {
+          setProgress(data.current, data.total);
+          log(`${data.ok ? '✔' : '✖'} (${data.current}/${data.total}) ${data.message}`);
+        } else if (data.type === 'finished') {
+          setProgress(data.total, data.total);
+          log(`Concluído. Importados: ${data.imported}, Falharam: ${data.failed}`);
+          if (data.errors?.length) log('Erros:\n- ' + data.errors.join('\n- '));
+        } else {
+          log(JSON.stringify(data));
+        }
+      }
+    });
   });
 </script>

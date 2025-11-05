@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Main } from "../../components/styles/Main.jsx";
 import PATHS from "../../navigation/navigation.js";
-import { edit, update } from './user.api.js';
+import { editUser, updateUser } from './user.api.js';
 import Loading from '../../components/Loading';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   Page,
   Card,
@@ -33,12 +33,14 @@ export default function ProfileEdit({ user }) {
   const [blocked, setBlocked] = useState(false);
   const [saving, setSaving] = useState(false);
   const navigate = useNavigate();
+  const { slug } = useParams();
 
   useEffect(() => {
-    if (!user?.id) return;
+    if (!user?.id && !slug) return;
     const loadProfile = async () => {
       try {
-        const data = await edit(user.id);
+        const idOrSlug = slug || user.id;
+        const data = await editUser(idOrSlug);
         setProfile(data);
         const a = data?.attributes;
         setForm((f) => ({
@@ -60,7 +62,7 @@ export default function ProfileEdit({ user }) {
       }
     };
     loadProfile();
-  }, [user?.id]);
+  }, [user?.id, slug]);
 
   useEffect(() => {
     return () => {
@@ -120,8 +122,10 @@ export default function ProfileEdit({ user }) {
 
     try {
       setSaving(true);
-      await update(user.id, payload);
-      navigate(PATHS.profile);
+  const idOrSlug = slug || user.id;
+  await updateUser(idOrSlug, payload);
+  const nextSlug = profile?.attributes?.slug || slug || user?.attributes?.slug || idOrSlug;
+  navigate(`${PATHS.profile}/${nextSlug}`);
     } catch (err) {
       setError(err?.response?.data?.error || err?.response?.data?.errors?.join(", ") || err.message || "Erro ao salvar.");
     } finally {
@@ -191,7 +195,7 @@ export default function ProfileEdit({ user }) {
                   <ButtonPrimary type="submit" disabled={saving}>
                     {saving ? "Salvando..." : "Salvar"}
                   </ButtonPrimary>
-                  <Button to={PATHS.profile}>Cancelar</Button>
+                  <Button to={`${PATHS.profile}/${profile?.attributes?.slug || slug || user?.attributes?.slug || ''}`}>Cancelar</Button>
                 </Actions>
               </div>
             </Grid>

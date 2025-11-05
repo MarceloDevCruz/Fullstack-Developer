@@ -10,7 +10,6 @@ class DashboardController < ApplicationController
   def upload_spreadsheet
     token = params[:token].presence || SecureRandom.uuid
     file  = params[:csv_file]
-    headers = ActiveModel::Type::Boolean.new.cast(params[:headers])
 
     unless file&.respond_to?(:tempfile)
       redirect_to import_spreadsheet_path(token: token), alert: "Selecione um arquivo válido." and return
@@ -21,7 +20,6 @@ class DashboardController < ApplicationController
 
     ImportSpreadsheetJob.perform_later(
       file_path: tmp_path.to_s,
-      has_headers: headers,
       channel_token: token,
       user_id: current_user.id
     )

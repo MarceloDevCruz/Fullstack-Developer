@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { Main } from "../../components/styles/Main.jsx";
 import PATHS from "../../navigation/navigation.js";
-import { show } from "./user.api.js";
+import { showUser } from "./user.api.js";
 import Loading from "../../components/Loading";
 import {
   Page,
@@ -23,11 +24,13 @@ export default function Profile({ user }) {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [blocked, setBlocked] = useState(false);
+  const { slug } = useParams();
 
   useEffect(() => {
     const loadProfile = async () => {
       try {
-        const data = await show(user?.id);
+        const idOrSlug = slug || user?.id;
+        const data = await showUser(idOrSlug);
         setProfile(data);
       } catch (err) {
         const status = err?.response?.status;
@@ -41,7 +44,7 @@ export default function Profile({ user }) {
       }
     };
     loadProfile();
-  }, [user?.id]);
+  }, [user?.id, slug]);
 
   if (blocked) return null;
   if (loading) return <Loading />;
@@ -70,7 +73,7 @@ export default function Profile({ user }) {
                 </Value>
               </Field>
               <Actions>
-                <Button to={PATHS.edit}>Editar Perfil</Button>
+                <Button to={`${PATHS.edit}/${profile?.attributes?.slug}`}>Editar Perfil</Button>
               </Actions>
             </div>
           </Grid>
