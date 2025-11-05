@@ -1,6 +1,6 @@
 class Api::V1::UsersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_user, only: [:show, :edit, :create, :update, :destroy]
+  before_action :set_user, only: [:show, :edit, :update, :destroy]
 
   def index
     if current_user.admin?
@@ -21,7 +21,7 @@ class Api::V1::UsersController < ApplicationController
 
   def edit
     if current_user.admin? || current_user.id == @user.id
-      render json: ::UserSerializer.new(@user).serializable_hash, status: :ok
+      render json: ::EditUserSerializer.new(@user).serializable_hash, status: :ok
     else
       render json: { error: I18n.t('controllers.user.unauthorized') }, status: :forbidden
     end
@@ -65,7 +65,8 @@ class Api::V1::UsersController < ApplicationController
   private
 
   def set_user
-    @user = ::User.find(params[:id]) || current_user
+    identifier = params[:id]
+    @user = ::User.find_by(slug: identifier) || ::User.find_by(id: identifier) || current_user
   end
 
   def user_params

@@ -26,6 +26,13 @@ export default function App() {
               </WithAuth>
             </>
           } />
+          <Route path="/perfil/:slug" element={
+            <>
+              <WithAuth>
+                <Show />
+              </WithAuth>
+            </>
+          } />
           <Route path="/perfil" element={
             <>
               <WithAuth>
@@ -33,7 +40,7 @@ export default function App() {
               </WithAuth>
             </>
           } />
-          <Route path="/perfil/editar" element={
+          <Route path="/perfil/editar/:slug" element={
             <>
               <WithAuth>
                 <Edit />

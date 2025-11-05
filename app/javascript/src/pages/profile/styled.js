@@ -178,3 +178,30 @@ export const Input = styled.input`
 export const Form = styled.form`
   width: 100%;
 `;
+
+export const AvatarActions = styled.div`
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+`;
+
+export const UploadLabel = styled.label`
+  color: #ede9fe;
+  background: rgba(139,92,246,0.16);
+  border: 1px solid rgba(167,139,250,0.35);
+  padding: 8px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 140ms ease, border-color 140ms ease, color 140ms ease, box-shadow 140ms ease;
+
+  &:hover {
+    background: rgba(139,92,246,0.26);
+    border-color: rgba(167,139,250,0.5);
+    color: #ffffff;
+    box-shadow: 0 8px 24px rgba(139,92,246,0.20);
+  }
+`;
+
+export const HiddenFileInput = styled.input.attrs({ type: "file", accept: "image/*" })`
+  display: none;
+`;

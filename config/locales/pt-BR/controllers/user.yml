@@ -2,3 +2,6 @@ pt-BR:
   controllers:
     user:
       unauthorized: "Você não tem permissão! você será redirecionado para a página de seu perfil."
+      not_found: "Usuário não encontrado."
+      cannot_destroy_admin: "Você não pode excluir administradores."
+      cannot_destroy_self: "Você não pode excluir a si mesmo."

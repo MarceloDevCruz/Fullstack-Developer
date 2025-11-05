@@ -37,12 +37,28 @@ export default function Header({ user }) {
   return (
     <Bar>
       <Inner>
-        <Avatar src={user?.attributes?.avatar?.src} alt={user?.attributes?.full_name} />
+        <Avatar src={user?.avatar?.src} alt={user?.full_name} />
         <Nav>
           <Link type="button" onClick={() => navigate(PATHS.admin)}>Admin</Link>
-          <Link type="button" onClick={() => navigate(PATHS.profile)}>Perfil</Link>
-          <Link type="button" onClick={() => navigate(PATHS.edit)}>Editar Perfil</Link>
-          <Link type="button" onClick={() => navigate(PATHS.spreedsheet)}>Planilha</Link>
+          <Link
+            type="button"
+            onClick={() => {
+              const slug = user?.slug;
+              navigate(slug ? `${PATHS.profile}/${slug}` : PATHS.profile);
+            }}
+          >
+            Perfil
+          </Link>
+          <Link
+            type="button"
+            onClick={() => {
+              const slug = user?.slug;
+              navigate(slug ? `${PATHS.edit}/${slug}` : PATHS.profile);
+            }}
+          >
+            Editar Perfil
+          </Link>
+          <Link as="a" href={PATHS.spreedsheet}>Planilha</Link>
           <SignOut onClick={handleSignOut}>Sair</SignOut>
         </Nav>
       </Inner>

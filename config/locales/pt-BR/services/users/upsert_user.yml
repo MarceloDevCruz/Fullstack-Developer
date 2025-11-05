@@ -1,0 +1,12 @@
+pt-BR:
+  services:
+    users:
+      upsert_user:
+        success:
+          created_or_updated: "OK: %{email} (%{role})"
+        errors:
+          required: "Nome e email são obrigatórios"
+          invalid_email: "Email inválido: %{email}"
+          generic: "Erro %{email}: %{details}"
+          exception: "Exceção %{email}: %{message}"
+          email_missing: "sem email"

@@ -1,0 +1,21 @@
+pt-BR:
+  views:
+    dashboard:
+      import_spreadsheet:
+        title: "Importar Planilha de Usuários"
+        upload_button: "Enviar e processar"
+        download_template: "Baixar Modelo (.xlsx)"
+        download_test: "Baixar Modelo de Teste de carga (.xlsx)"
+        label: "Arquivo (.xlsx)"
+        instructions: "Baixe o modelo, preencha os usuários e envie o arquivo."
+        progress: "Progresso"
+        action_cable: "ActionCable em tempo real"
+        processing: "Processando a planilha, por favor aguarde..."
+        success: "Planilha importada com sucesso!"
+        error: "Ocorreu um erro ao importar a planilha. Por favor, tente novamente."
+        columns:
+          title: "Colunas: "
+          full_name: "full_name"
+          email: "email"
+          role: "Função"
+          roles: "(admin/user)"
