@@ -15,8 +15,8 @@
     "esbuild": "^0.25.11"
   },
   "scripts": {
-    "build": "esbuild app/javascript/application.js --bundle --loader:.js=jsx --target=es2017 --outfile=app/assets/builds/application.js --minify --external:@hotwired/turbo-rails --external:controllers",
-    "build:watch": "esbuild app/javascript/application.js --bundle --loader:.js=jsx --target=es2017 --outfile=app/assets/builds/application.js --watch --loader:.js=jsx --external:@hotwired/turbo-rails --external:controllers",
+    "build": "esbuild app/javascript/application.js --bundle --format=iife --loader:.js=jsx --loader:.jsx=jsx --target=es2017 --outfile=app/assets/builds/application.js --minify",
+    "build:watch": "esbuild app/javascript/application.js --bundle --format=iife --loader:.js=jsx --loader:.jsx=jsx --target=es2017 --outfile=app/assets/builds/application.js --watch",
     "start": "npm run build:watch"
   }
 }

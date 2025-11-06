@@ -34,7 +34,7 @@ ENV BUNDLE_DEPLOYMENT="" \
 
 # Install packages needed to build gems
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libpq-dev libyaml-dev pkg-config && \
+    apt-get install --no-install-recommends -y build-essential git libpq-dev libyaml-dev pkg-config nodejs npm && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Install application gems
@@ -52,7 +52,10 @@ RUN sed -i 's/\r$//' bin/* && chmod +x bin/*
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
-# Precompiling assets for production without requiring secret RAILS_MASTER_KEY
+# Install JS deps and build frontend bundle
+RUN npm i -g yarn && yarn install && yarn build
+
+# Precompiling assets for production without requiring secret RAILS_MASTER_KEY (after JS build)
 RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
 
