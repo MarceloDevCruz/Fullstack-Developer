@@ -26,8 +26,8 @@ gem "roo-xls"
 gem "jsonapi-serializer"
 gem "draper"
 gem "friendly_id"
-gem 'sidekiq', '~> 7.2'
-gem 'redis', '~> 5.0'
+#gem 'sidekiq', '~> 7.2'
+#gem 'redis', '~> 5.0'
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
