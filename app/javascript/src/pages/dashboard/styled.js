@@ -115,3 +115,70 @@ export const EmptyText = styled.p`
   color: #c4b5fd;
   margin: 8px 0 0 0;
 `;
+
+export const StatsBar = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 8px 0 14px 0;
+`;
+
+export const StatCard = styled.div`
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(12,6,22,0.45);
+  border: 1px solid rgba(167,139,250,0.25);
+  box-shadow: 0 6px 18px rgba(139,92,246,0.12);
+`;
+
+export const StatLabel = styled.span`
+  font-size: 13px;
+  color: #c4b5fd;
+`;
+
+export const StatValue = styled.span`
+  font-size: 16px;
+  font-weight: 700;
+  color: #ede9fe;
+`;
+
+// ===== Actions (e.g., Novo Usuário) =====
+export const ActionsRow = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  margin: 2px 0 12px 0;
+`;
+
+export const NewButton = styled.button`
+  color: #0b0416;
+  background: #c4b5fd;
+  border: 1px solid rgba(167,139,250,0.55);
+  padding: 10px 14px;
+  border-radius: 12px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 140ms ease, border-color 140ms ease, box-shadow 140ms ease, color 140ms ease;
+
+  &:hover {
+    background: #a78bfa;
+    border-color: rgba(167,139,250,0.75);
+    box-shadow: 0 8px 24px rgba(139,92,246,0.20);
+    color: #0b0416;
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(216,180,254,0.35);
+  }
+`;

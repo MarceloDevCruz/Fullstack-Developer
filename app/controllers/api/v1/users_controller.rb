@@ -21,7 +21,16 @@ class Api::V1::UsersController < ApplicationController
 
   def edit
     if current_user.admin? || current_user.id == @user.id
-      render json: ::EditUserSerializer.new(@user).serializable_hash, status: :ok
+      render json: ::UserSerializer.new(@user).serializable_hash, status: :ok
+    else
+      render json: { error: I18n.t('controllers.user.unauthorized') }, status: :forbidden
+    end
+  end
+
+  def new
+    if current_user.admin?
+      user = ::User.new
+      render json: {}, status: :ok
     else
       render json: { error: I18n.t('controllers.user.unauthorized') }, status: :forbidden
     end
@@ -57,6 +66,14 @@ class Api::V1::UsersController < ApplicationController
       else
         render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
       end
+    else
+      render json: { error: I18n.t('controllers.user.unauthorized') }, status: :forbidden
+    end
+  end
+
+  def stats
+    if current_user.admin?
+      render json: UserDecorator.dashboard_stats, status: :ok
     else
       render json: { error: I18n.t('controllers.user.unauthorized') }, status: :forbidden
     end

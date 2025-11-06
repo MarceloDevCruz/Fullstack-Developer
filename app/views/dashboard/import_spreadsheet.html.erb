@@ -1,7 +1,13 @@
 <div class="container my-4">
   <div class="row justify-content-center">
     <div class="col-12 col-lg-8">
-      <h1 class="h3 mb-3"><%= t('views.dashboard.import_spreadsheet.title') %></h1>
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h3 m-0"><%= t('views.dashboard.import_spreadsheet.title') %></h1>
+        <%= link_to root_path, class: 'btn btn-outline-light btn-sm d-flex align-items-center gap-2' do %>
+          <span aria-hidden="true">←</span>
+          <span><%= t('views.dashboard.back_to_home') %></span>
+        <% end %>
+      </div>
       <div class="card mb-3">
         <div class="card-body">
           <p class="text-muted mb-3"><%= t('views.dashboard.import_spreadsheet.instructions') %></p>
@@ -70,6 +76,12 @@
 
     $jq('form').on('submit', function() {
       const $btn = $jq(this).find('button[type="submit"]');
+      if (!$btn.data('original-text')) {
+        $btn.data('original-text', $btn.text());
+      }
+      if (!$btn.data('original-classes')) {
+        $btn.data('original-classes', $btn.attr('class'));
+      }
       $btn.prop('disabled', true).removeClass('btn-success').addClass('btn-secondary').text('Enviando...');
     });
 
@@ -85,6 +97,12 @@
           setProgress(data.total, data.total);
           log(`Concluído. Importados: ${data.imported}, Falharam: ${data.failed}`);
           if (data.errors?.length) log('Erros:\n- ' + data.errors.join('\n- '));
+          const $btn = $jq('form').find('button[type="submit"]');
+          const originalText = $btn.data('original-text') || '<%= j t('views.dashboard.import_spreadsheet.upload_button') %>';
+          $btn.prop('disabled', false)
+              .removeClass('btn-secondary')
+              .addClass('btn-success')
+              .text(originalText);
         } else {
           log(JSON.stringify(data));
         }

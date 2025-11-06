@@ -8,6 +8,7 @@ import Dashboard from "./pages/dashboard/Dashboard.jsx";
 import NotFound from "./pages/notfound/NotFound.jsx";
 import Show from "./pages/profile/Show.jsx";
 import Edit from "./pages/profile/Edit.jsx";
+import New from "./pages/profile/New.jsx";
 
 function WithAuth({ children }) {
   const { user, isAuthenticated, loading } = useAuth();
@@ -44,6 +45,13 @@ export default function App() {
             <>
               <WithAuth>
                 <Edit />
+              </WithAuth>
+            </>
+          } />
+          <Route path="/perfil/novo" element={
+            <>
+              <WithAuth>
+                <New />
               </WithAuth>
             </>
           } />
