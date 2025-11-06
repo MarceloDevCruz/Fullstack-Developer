@@ -62,6 +62,14 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
+  def stats
+    if current_user.admin?
+      render json: UserDecorator.dashboard_stats, status: :ok
+    else
+      render json: { error: I18n.t('controllers.user.unauthorized') }, status: :forbidden
+    end
+  end
+
   private
 
   def set_user

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import Loading from "../../components/Loading.jsx";
-import { indexUser, deleteUser } from "./user.api.js";
+import { indexUser, usersStats, deleteUser } from "./user.api.js";
 import { Main } from "../../components/styles/Main.jsx";
 import PATHS from "../../navigation/navigation.js";
 import { Page,
@@ -16,11 +16,17 @@ import { Page,
   Avatar,
   RoleBadge,
   ErrorText,
-  EmptyText
+  EmptyText,
+  StatsBar,
+  StatCard,
+  StatLabel,
+  StatValue
 } from "./styled.js";
 
 export default function Dashboard({user}) {
   const [users, setUsers] = useState([]);
+  const [totalUsers, setTotalUsers] = useState(null);
+  const [totalsByRole, setTotalsByRole] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [blocked, setBlocked] = useState(false);
@@ -29,8 +35,13 @@ export default function Dashboard({user}) {
   useEffect(() => {
     const loadUsers = async () => {
       try {
-        const data = await indexUser();
-        setUsers(data);
+        const [usersResp, statsResp] = await Promise.all([
+          indexUser(),
+          usersStats(),
+        ]);
+        setUsers(usersResp || []);
+        setTotalUsers(statsResp?.totalUsers);
+        setTotalsByRole(statsResp?.totalsByRole);
       } catch (err) {
         const status = err?.response?.status;
         if (status === 403 || status === 401 || status === 500) {
@@ -82,6 +93,22 @@ export default function Dashboard({user}) {
         <Title>Dashboard</Title>
         <Card>
           {error && <ErrorText>Erro: {error}</ErrorText>}
+          {(totalUsers || totalsByRole) && (
+            <StatsBar>
+              {totalUsers && (
+                <StatCard>
+                  <StatLabel>Total de Usuários</StatLabel>
+                  <StatValue>{totalUsers}</StatValue>
+                </StatCard>
+              )}
+              {totalsByRole && Object.entries(totalsByRole).map(([role, count]) => (
+                <StatCard key={role}>
+                  <StatLabel style={{ textTransform: 'capitalize' }}>{role}</StatLabel>
+                  <StatValue>{count}</StatValue>
+                </StatCard>
+              ))}
+            </StatsBar>
+          )}
           {users.length === 0 && !error ? (
             <EmptyText>Nenhum usuário encontrado.</EmptyText>
           ) : (
