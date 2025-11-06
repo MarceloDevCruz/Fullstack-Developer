@@ -16,8 +16,10 @@ import {
   ButtonPrimary,
 } from './styled';
 import { FullName, Email, Password, PasswordConfirmation, Role, Avatar } from "../../components/inputs";
+import { sanitizeRole, isAdmin } from "../../utils/roles";
 
 export default function ProfileEdit({ user }) {
+
   const [profile, setProfile] = useState(null);
   const [form, setForm] = useState({ full_name: "", email: "", role: "user", password: "", password_confirmation: "" });
   const [avatarFile, setAvatarFile] = useState(null);
@@ -40,7 +42,7 @@ export default function ProfileEdit({ user }) {
           ...f,
           full_name: a.full_name || "",
           email: a.email || "",
-          role: a.role || "",
+          role: sanitizeRole(a.role),
           password: "",
           password_confirmation: "",
         }));
@@ -63,7 +65,11 @@ export default function ProfileEdit({ user }) {
 
   const onChange = (e) => {
     const { name, value } = e.target;
-    setForm((f) => ({ ...f, [name]: value }));
+    if (name === "role") {
+      setForm((f) => ({ ...f, role: sanitizeRole(value) }));
+    } else {
+      setForm((f) => ({ ...f, [name]: value }));
+    }
   };
 
   const onAvatarFile = (file) => setAvatarFile(file);
@@ -81,7 +87,7 @@ export default function ProfileEdit({ user }) {
     };
 
     if (isAdmin(user)) {
-      payload.role = form.role;
+      payload.role = sanitizeRole(form.role);
     }
     if (form.password || form.password_confirmation) {
       if (form.password.length < 6) {
@@ -111,11 +117,6 @@ export default function ProfileEdit({ user }) {
     }
   };
 
-  function isAdmin(currentUser) {
-    if (!currentUser) return false;
-    const r = (currentUser.role || "").toString().toLowerCase();
-    return r.includes("admin");
-  }
 
   const serverAvatar = profile?.attributes?.avatar?.src || "";
   const avatarSrc = serverAvatar;
