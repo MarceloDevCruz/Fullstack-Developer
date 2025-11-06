@@ -4,6 +4,7 @@ pt-BR:
       import_spreadsheet:
         title: "Importar Planilha de Usuários"
         upload_button: "Enviar e processar"
+        back_to_home: "Voltar ao início"
         download_template: "Baixar Modelo (.xlsx)"
         download_test: "Baixar Modelo de Teste de carga (.xlsx)"
         label: "Arquivo (.xlsx)"
@@ -17,5 +18,5 @@ pt-BR:
           title: "Colunas: "
           full_name: "full_name"
           email: "email"
-          role: "Função"
+          role: "role"
           roles: "(admin/user)"

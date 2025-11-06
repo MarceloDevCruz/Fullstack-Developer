@@ -9,25 +9,18 @@ import {
   Card,
   Title,
   Grid,
-  AvatarBig,
-  Field,
-  Label,
   ErrorText,
   Actions,
   Button,
   Form,
-  Input,
   ButtonPrimary,
-  AvatarActions,
-  UploadLabel,
-  HiddenFileInput,
 } from './styled';
+import { FullName, Email, Password, PasswordConfirmation, Role, Avatar } from "../../components/inputs";
 
 export default function ProfileEdit({ user }) {
   const [profile, setProfile] = useState(null);
-  const [form, setForm] = useState({ full_name: "", email: "", password: "", password_confirmation: "" });
+  const [form, setForm] = useState({ full_name: "", email: "", role: "user", password: "", password_confirmation: "" });
   const [avatarFile, setAvatarFile] = useState(null);
-  const [avatarPreview, setAvatarPreview] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [blocked, setBlocked] = useState(false);
@@ -47,6 +40,7 @@ export default function ProfileEdit({ user }) {
           ...f,
           full_name: a.full_name || "",
           email: a.email || "",
+          role: a.role || "",
           password: "",
           password_confirmation: "",
         }));
@@ -64,12 +58,6 @@ export default function ProfileEdit({ user }) {
     loadProfile();
   }, [user?.id, slug]);
 
-  useEffect(() => {
-    return () => {
-      if (avatarPreview) URL.revokeObjectURL(avatarPreview);
-    };
-  }, [avatarPreview]);
-
   if (blocked) return null;
   if (loading) return (<Loading />);
 
@@ -78,31 +66,23 @@ export default function ProfileEdit({ user }) {
     setForm((f) => ({ ...f, [name]: value }));
   };
 
-  const onAvatarChange = (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setAvatarFile(file);
-    const url = URL.createObjectURL(file);
-    setAvatarPreview((prev) => {
-      if (prev) URL.revokeObjectURL(prev);
-      return url;
-    });
-  };
+  const onAvatarFile = (file) => setAvatarFile(file);
 
   const onSubmit = async (e) => {
     e.preventDefault();
     setError(null);
-
     if (!form.full_name || !form.email) {
       setError("Nome e e-mail são obrigatórios.");
       return;
     }
-
     const payload = {
       full_name: form.full_name,
       email: form.email,
     };
 
+    if (isAdmin(user)) {
+      payload.role = form.role;
+    }
     if (form.password || form.password_confirmation) {
       if (form.password.length < 6) {
         setError("A senha deve ter pelo menos 6 caracteres.");
@@ -115,11 +95,9 @@ export default function ProfileEdit({ user }) {
       payload.password = form.password;
       payload.password_confirmation = form.password_confirmation;
     }
-
     if (avatarFile) {
       payload.avatar = avatarFile;
     }
-
     try {
       setSaving(true);
   const idOrSlug = slug || user.id;
@@ -133,8 +111,14 @@ export default function ProfileEdit({ user }) {
     }
   };
 
-  const serverAvatar = profile?.attributes?.avatar?.src || profile?.attributes?.avatar || "";
-  const avatarSrc = avatarPreview || serverAvatar;
+  function isAdmin(currentUser) {
+    if (!currentUser) return false;
+    const r = (currentUser.role || "").toString().toLowerCase();
+    return r.includes("admin");
+  }
+
+  const serverAvatar = profile?.attributes?.avatar?.src || "";
+  const avatarSrc = serverAvatar;
 
   return (
     <Main user={user}>
@@ -144,53 +128,13 @@ export default function ProfileEdit({ user }) {
           {error && <ErrorText>Erro: {error}</ErrorText>}
           <Form onSubmit={onSubmit}>
             <Grid>
+              <Avatar previewSrc={avatarSrc} label="Escolher foto" onFileChange={onAvatarFile} />
               <div>
-                <AvatarBig src={avatarSrc} alt={form.full_name || "Avatar"} />
-                <AvatarActions>
-                  <UploadLabel htmlFor="avatar-file">Trocar avatar</UploadLabel>
-                  <HiddenFileInput id="avatar-file" onChange={onAvatarChange} />
-                </AvatarActions>
-              </div>
-              <div>
-                <Field>
-                  <Label>Nome</Label>
-                  <Input
-                    name="full_name"
-                    value={form.full_name}
-                    onChange={onChange}
-                    placeholder="Seu nome completo"
-                  />
-                </Field>
-                <Field>
-                  <Label>E-mail</Label>
-                  <Input
-                    type="email"
-                    name="email"
-                    value={form.email}
-                    onChange={onChange}
-                    placeholder="seuemail@exemplo.com"
-                  />
-                </Field>
-                <Field>
-                  <Label>Nova senha</Label>
-                  <Input
-                    type="password"
-                    name="password"
-                    value={form.password}
-                    onChange={onChange}
-                    placeholder="Digite uma nova senha"
-                  />
-                </Field>
-                <Field>
-                  <Label>Confirmar senha</Label>
-                  <Input
-                    type="password"
-                    name="password_confirmation"
-                    value={form.password_confirmation}
-                    onChange={onChange}
-                    placeholder="Repita a nova senha"
-                  />
-                </Field>
+                <FullName value={form.full_name} onChange={onChange} />
+                <Email value={form.email} onChange={onChange} />
+                {isAdmin(user) && <Role value={form.role} onChange={onChange} />}
+                <Password value={form.password} onChange={onChange} label="Nova senha" placeholder="Digite uma nova senha" />
+                <PasswordConfirmation value={form.password_confirmation} onChange={onChange} label="Confirmar senha" placeholder="Repita a nova senha" />
                 <Actions>
                   <ButtonPrimary type="submit" disabled={saving}>
                     {saving ? "Salvando..." : "Salvar"}

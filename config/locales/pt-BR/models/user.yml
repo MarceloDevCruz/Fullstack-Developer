@@ -19,6 +19,7 @@ pt-BR:
     errors:
       messages:
         blank: "não pode ficar em branco"
+        confirmation: "não coincide com %{attribute}"
         validate_avatar_type_and_size:
           type: "deve ser PNG, JPG, JPEG ou WEBP"
           size: "deve ter menos de 5MB"
@@ -28,3 +29,5 @@ pt-BR:
             full_name:
               too_short: "é muito curto (mínimo: %{count} caracteres)"
               too_long: "é muito longo (máximo: %{count} caracteres)"
+            password_confirmation:
+              confirmation: "não coincide com %{attribute}"

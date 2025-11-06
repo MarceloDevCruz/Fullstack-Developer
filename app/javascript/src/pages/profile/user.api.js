@@ -56,6 +56,33 @@ export async function editUser(id) {
   }
 }
 
+export async function newUser() {
+  try {
+    const response = await http.get(`/api/v1/users/new`);
+    return response.data.data;
+  } catch (error) {
+    const status = error?.response?.status;
+
+    if (status === 403 || status === 401 || status === 500) {
+      const serverMsg = error?.response?.data?.error
+      Swal.fire({
+        icon: "warning",
+        title: "Sem permissão!",
+        text: serverMsg,
+        timer: 3000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+      });
+
+      setTimeout(() => {
+        window.location.assign(PATHS.profile);
+      }, 3000);
+    }
+
+    throw error;
+  }
+}
+
 export async function updateUser(id, attrs) {
   try {
     if (attrs.avatar instanceof File) {
@@ -77,6 +104,45 @@ export async function updateUser(id, attrs) {
   } catch (error) {
     const status = error?.response?.status;
     if (status === 403 || status === 401 || status === 404 || status === 500) {
+      const serverMsg = error?.response?.data?.error;
+      Swal.fire({
+        icon: "warning",
+        title: "Sem permissão!",
+        text: serverMsg,
+        timer: 3000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+      });
+      setTimeout(() => {
+        window.location.assign(PATHS.login);
+      }, 3000);
+    }
+    throw error;
+  }
+}
+
+export async function createUser(attrs) {
+  try {
+    if (attrs.avatar instanceof File) {
+      const form = new FormData();
+      Object.entries(attrs).forEach(([k, v]) => {
+        if (k === "avatar") {
+          form.append("user[avatar]", v);
+        } else {
+          form.append(`user[${k}]`, v ?? "");
+        }
+      });
+      const response = await http.post(`/api/v1/users`, form, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      return response.data.data;
+    }
+
+    const response = await http.post(`/api/v1/users`, { user: attrs });
+    return response.data.data;
+  } catch (error) {
+    const status = error?.response?.status;
+    if (status === 403 || status === 401 || status === 500) {
       const serverMsg = error?.response?.data?.error;
       Swal.fire({
         icon: "warning",

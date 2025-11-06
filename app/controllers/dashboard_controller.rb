@@ -1,6 +1,9 @@
 class DashboardController < ApplicationController
   layout 'react', only: :index
 
+  before_action :authenticate_user!, only: [:import_spreadsheet, :upload_spreadsheet]
+  before_action :require_admin_for_import, only: [:import_spreadsheet, :upload_spreadsheet]
+
   def index; end
 
   def import_spreadsheet
@@ -24,8 +27,14 @@ class DashboardController < ApplicationController
       user_id: current_user.id
     )
 
-    redirect_to import_spreadsheet_path(token: token), notice: "Upload iniciado. Acompanhe o progresso."
   rescue => e
     redirect_to import_spreadsheet_path, alert: "Falha ao iniciar: #{e.message}"
+  end
+
+  private
+
+  def require_admin_for_import
+    return if current_user&.admin?
+    redirect_back fallback_location: root_path, alert: I18n.t('controllers.user.unauthorized')
   end
 end

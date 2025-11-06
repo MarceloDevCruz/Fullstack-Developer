@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
       get 'me', to: 'sessions#me'
-      resources :users, only: [:index, :show, :edit, :create, :update, :destroy] do
+      resources :users, only: [:index, :show, :new, :edit, :create, :update, :destroy] do
         collection do
           get :stats
         end

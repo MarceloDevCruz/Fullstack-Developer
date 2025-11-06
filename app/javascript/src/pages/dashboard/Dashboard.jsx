@@ -20,7 +20,9 @@ import { Page,
   StatsBar,
   StatCard,
   StatLabel,
-  StatValue
+  StatValue,
+  ActionsRow,
+  NewButton
 } from "./styled.js";
 
 export default function Dashboard({user}) {
@@ -74,6 +76,12 @@ export default function Dashboard({user}) {
     try {
       await deleteUser(u.attributes.slug || u.id);
       setUsers((prev) => prev.filter((x) => x.id !== u.id));
+      try {
+        const s = await usersStats();
+        setTotalUsers(s?.totalUsers);
+        setTotalsByRole(s?.totalsByRole);
+      } catch (_) {
+      }
       Swal.fire({
         icon: "success",
         title: "Excluído",
@@ -93,6 +101,11 @@ export default function Dashboard({user}) {
         <Title>Dashboard</Title>
         <Card>
           {error && <ErrorText>Erro: {error}</ErrorText>}
+          <ActionsRow>
+            <NewButton type="button" onClick={() => navigate(PATHS.new)}>
+              Novo Usuário
+            </NewButton>
+          </ActionsRow>
           {(totalUsers || totalsByRole) && (
             <StatsBar>
               {totalUsers && (
