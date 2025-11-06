@@ -1,4 +1,18 @@
-# See https://git-scm.com/docs/gitattributes for more about git attribute files.
+# Enforce LF line endings in scripts and code to avoid CRLF issues in Linux containers
+* text=auto
+
+# Shell scripts and executables
+*.sh text eol=lf
+bin/* text eol=lf
+
+# Ruby and Dockerfile
+*.rb text eol=lf
+Dockerfile text eol=lf
+
+# YAML and JSON
+*.yml text eol=lf
+*.yaml text eol=lf
+*.json text eol=lf# See https://git-scm.com/docs/gitattributes for more about git attribute files.
 
 # Mark the database schema as having been generated.
 db/schema.rb linguist-generated

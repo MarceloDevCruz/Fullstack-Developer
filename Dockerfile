@@ -28,6 +28,10 @@ ENV RAILS_ENV="production" \
 # Throw-away build stage to reduce size of final image
 FROM base AS build
 
+# Disable bundler frozen/deployment mode during build so the lockfile can be updated if Gemfile changes
+ENV BUNDLE_DEPLOYMENT="" \
+    BUNDLE_FROZEN="false"
+
 # Install packages needed to build gems
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y build-essential git libpq-dev libyaml-dev pkg-config && \
@@ -41,6 +45,9 @@ RUN bundle install && \
 
 # Copy application code
 COPY . .
+
+# Normalize Windows CRLF to LF for scripts and ensure executables
+RUN sed -i 's/\r$//' bin/* && chmod +x bin/*
 
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
@@ -64,7 +71,7 @@ RUN groupadd --system --gid 1000 rails && \
     chown -R rails:rails db log storage tmp
 USER 1000:1000
 
-# Entrypoint prepares the database.
+# Entrypoint prepares the database
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
 # Start server via Thruster by default, this can be overwritten at runtime
